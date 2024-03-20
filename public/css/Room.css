@@ -1,0 +1,73 @@
+/*--------------------------------------------------------------
+# Keyframes
+--------------------------------------------------------------*/
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@-moz-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+:root {
+    --msger-top: 50%;
+    --msger-left: 50%;
+    --msger-height: 680px;
+    --msger-width: 420px;
+    --msger-bg: #16171b;
+    --left-msg-bg: #222328;
+    --right-msg-bg: #0a0b0c;
+    --box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+* {
+    outline: none;
+    font-family: 'Verdana';
+}
+body {
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+/*--------------------------------------------------------------
+# Control buttons
+--------------------------------------------------------------*/
+#control {
+    z-index: 1;
+    position: fixed;
+    padding: 10px;
+    top: 0;
+    width: 100%;
+    background: black;
+}
+#control button {
+    border-radius: 5px;
+}
+#control p {
+    font-size: small;
+    cursor: default;
+}
+
+#exitButton:hover {
+    color: red;
+}
+
+/*--------------------------------------------------------------
+# Room QR
+--------------------------------------------------------------*/
