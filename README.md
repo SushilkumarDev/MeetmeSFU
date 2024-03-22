@@ -1,6 +1,5 @@
 # MeetmeSFU
 Powered by `WebRTC` with [SFU](https://mediasoup.org) integrated server.
-![mirotalksfu](public/images/mirotalksfu.png)
 ## Features
 -   Is `100% Free` - `Open Source` - `Self Hosted`
 -   `No download`, `plug-in` or `login` required, entirely browser based
