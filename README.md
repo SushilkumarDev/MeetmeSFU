@@ -18,9 +18,9 @@ Powered by `WebRTC` with [SFU](https://mediasoup.org) integrated server.
 -   You will need to have `Node.js` installed, this project has been tested with Node version [12.X](https://nodejs.org/en/blog/release/v12.22.1/) and [14.X](https://nodejs.org/en/blog/release/v14.17.5/)
 ```bash
 # Clone this repo
-$ git clone https://github.com/miroslavpejic85/mirotalksfu.git
+$ git clone https://github.com/SushilkumarDev/MeetmeSFU.git
 # Go to to dir mirotalksfu
-$ cd mirotalksfu
+$ cd MeetmeSFU
 # Copy src/config.template.js in src/config.js
 $ cp src/config.template.js src/config.js
 # Install dependencies
