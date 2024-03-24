@@ -170,3 +170,97 @@ module.exports = class Peer {
         this.producers.delete(producer_id);
         log.debug('Producer closed and deleted', { producer_id });
     }
+
+    // ####################################################
+    // CONSUMER
+    // ####################################################
+
+    getConsumers() {
+        return JSON.parse(JSON.stringify([...this.consumers]));
+    }
+
+    getConsumer(consumer_id) {
+        return this.consumers.get(consumer_id);
+    }
+
+    async createConsumer(consumer_transport_id, producer_id, rtpCapabilities) {
+        try {
+            const consumerTransport = this.transports.get(consumer_transport_id);
+
+            if (!consumerTransport) {
+                return `Consumer transport with id ${consumer_transport_id} not found`;
+            }
+
+            const consumer = await consumerTransport.consume({
+                producerId: producer_id,
+                rtpCapabilities,
+                enableRtx: true, // Enable NACK for OPUS.
+                paused: false,
+            });
+
+            if (!consumer) {
+                return `Consumer for producer ID ${producer_id} not found`;
+            }
+
+            const { id, type, kind, rtpParameters, producerPaused } = consumer;
+
+            if (['simulcast', 'svc'].includes(type)) {
+                const { scalabilityMode } = rtpParameters.encodings[0];
+                const spatialLayer = parseInt(scalabilityMode.substring(1, 2)); // 1/2/3
+                const temporalLayer = parseInt(scalabilityMode.substring(3, 4)); // 1/2/3
+                try {
+                    await consumer.setPreferredLayers({
+                        spatialLayer: spatialLayer,
+                        temporalLayer: temporalLayer,
+                    });
+                    log.debug(`Consumer [${type}-${kind}] ----->`, {
+                        scalabilityMode,
+                        spatialLayer,
+                        temporalLayer,
+                    });
+                } catch (error) {
+                    return `Error to set Consumer preferred layers: ${error.message}`;
+                }
+            } else {
+                log.debug('Consumer ----->', { type: type, kind: kind });
+            }
+
+            this.consumers.set(id, consumer);
+
+            consumer.on('transportclose', () => {
+                log.debug('Consumer transport close', {
+                    peer_name: this.peer_info?.peer_name,
+                    consumer_id: id,
+                });
+                this.removeConsumer(id);
+            });
+
+            return {
+                consumer,
+                params: {
+                    producerId: producer_id,
+                    id: id,
+                    kind: kind,
+                    rtpParameters: rtpParameters,
+                    type: type,
+                    producerPaused: producerPaused,
+                },
+            };
+        } catch (error) {
+            log.error('Error creating consumer', error.message);
+            return error.message;
+        }
+    }
+
+    removeConsumer(consumer_id) {
+        if (this.consumers.has(consumer_id)) {
+            try {
+                this.consumers.get(consumer_id).close();
+            } catch (error) {
+                log.warn('Close Consumer', error.message);
+            }
+            this.consumers.delete(consumer_id);
+            log.debug('Consumer closed and deleted', { consumer_id });
+        }
+    }
+};
