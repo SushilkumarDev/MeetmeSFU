@@ -66,3 +66,30 @@ module.exports = class Peer {
                 break;
         }
     }
+   // ####################################################
+    // TRANSPORT
+    // ####################################################
+
+    getTransports() {
+        return JSON.parse(JSON.stringify([...this.transports]));
+    }
+
+    addTransport(transport) {
+        this.transports.set(transport.id, transport);
+    }
+
+    async connectTransport(transport_id, dtlsParameters) {
+        if (!this.transports.has(transport_id)) {
+            return false;
+        }
+
+        await this.transports.get(transport_id).connect({
+            dtlsParameters: dtlsParameters,
+        });
+
+        return true;
+    }
+
+    close() {
+        this.transports.forEach((transport) => transport.close());
+    }
