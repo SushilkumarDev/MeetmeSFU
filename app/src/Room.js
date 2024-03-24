@@ -494,3 +494,76 @@ module.exports = class Room {
     isBanned(uuid) {
         return this.bannedPeers.includes(uuid);
     }
+
+    // ####################################################
+    // ROOM STATUS
+    // ####################################################
+
+    // GET
+    isBroadcasting() {
+        return this._isBroadcasting;
+    }
+    getPassword() {
+        return this._roomPassword;
+    }
+
+    // BOOL
+    isLocked() {
+        return this._isLocked;
+    }
+    isLobbyEnabled() {
+        return this._isLobbyEnabled;
+    }
+    isHostOnlyRecording() {
+        return this._hostOnlyRecording;
+    }
+
+    // SET
+    setIsBroadcasting(status) {
+        this._isBroadcasting = status;
+    }
+    setLocked(status, password) {
+        this._isLocked = status;
+        this._roomPassword = password;
+    }
+    setLobbyEnabled(status) {
+        this._isLobbyEnabled = status;
+    }
+    setHostOnlyRecording(status) {
+        this._hostOnlyRecording = status;
+    }
+
+    // ####################################################
+    // ERRORS
+    // ####################################################
+
+    callback(message) {
+        return { error: message };
+    }
+
+    // ####################################################
+    // SENDER
+    // ####################################################
+
+    broadCast(socket_id, action, data) {
+        for (let otherID of Array.from(this.peers.keys()).filter((id) => id !== socket_id)) {
+            this.send(otherID, action, data);
+        }
+    }
+
+    sendTo(socket_id, action, data) {
+        for (let peer_id of Array.from(this.peers.keys()).filter((id) => id === socket_id)) {
+            this.send(peer_id, action, data);
+        }
+    }
+
+    sendToAll(action, data) {
+        for (let peer_id of Array.from(this.peers.keys())) {
+            this.send(peer_id, action, data);
+        }
+    }
+
+    send(socket_id, action, data) {
+        this.io.to(socket_id).emit(action, data);
+    }
+};
