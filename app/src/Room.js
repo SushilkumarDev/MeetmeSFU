@@ -262,3 +262,106 @@ module.exports = class Room {
     // ####################################################
     // WebRTC TRANSPORT
     // ####################################################
+    async createWebRtcTransport(socket_id) {
+        const { maxIncomingBitrate, initialAvailableOutgoingBitrate, listenInfos } = this.webRtcTransport;
+
+        const webRtcTransportOptions = {
+            ...(this.webRtcServerActive ? { webRtcServer: this.webRtcServer } : { listenInfos: listenInfos }),
+            enableUdp: true,
+            enableTcp: true,
+            preferUdp: true,
+            iceConsentTimeout: 20,
+            initialAvailableOutgoingBitrate,
+        };
+
+        const transport = await this.router.createWebRtcTransport(webRtcTransportOptions);
+
+        if (!transport) {
+            return this.callback('[Room|createWebRtcTransport] Failed to create WebRTC transport');
+        }
+
+        const { id, iceParameters, iceCandidates, dtlsParameters } = transport;
+
+        if (maxIncomingBitrate) {
+            try {
+                await transport.setMaxIncomingBitrate(maxIncomingBitrate);
+            } catch (error) {
+                log.debug('Transport setMaxIncomingBitrate error', error.message);
+            }
+        }
+
+        const peer = this.getPeer(socket_id);
+
+        if (!peer || typeof peer !== 'object') {
+            return this.callback(`[Room|createWebRtcTransport] Peer object not found for socket ID: ${socket_id}`);
+        }
+
+        const { peer_name } = peer;
+
+        transport.on('icestatechange', (iceState) => {
+            if (iceState === 'disconnected' || iceState === 'closed') {
+                log.debug('Transport closed "icestatechange" event', {
+                    peer_name: peer_name,
+                    iceState: iceState,
+                });
+                transport.close();
+            }
+        });
+
+        transport.on('sctpstatechange', (sctpState) => {
+            log.debug('Transport "sctpstatechange" event', {
+                peer_name: peer_name,
+                sctpState: sctpState,
+            });
+        });
+
+        transport.on('dtlsstatechange', (dtlsState) => {
+            if (dtlsState === 'failed' || dtlsState === 'closed') {
+                log.debug('Transport closed "dtlsstatechange" event', {
+                    peer_name: peer_name,
+                    dtlsState: dtlsState,
+                });
+                transport.close();
+            }
+        });
+
+        transport.observer.on('close', () => {
+            log.debug('Transport closed', { peer_name: peer_name, transport_id: transport.id });
+        });
+
+        log.debug('Adding transport', { transportId: id });
+
+        peer.addTransport(transport);
+
+        return {
+            id: id,
+            iceParameters: iceParameters,
+            iceCandidates: iceCandidates,
+            dtlsParameters: dtlsParameters,
+        };
+    }
+
+    async connectPeerTransport(socket_id, transport_id, dtlsParameters) {
+        try {
+            if (!socket_id || !transport_id || !dtlsParameters) {
+                return this.callback('[Room|connectPeerTransport] Invalid input parameters');
+            }
+
+            const peer = this.getPeer(socket_id);
+
+            if (!peer || typeof peer !== 'object') {
+                return this.callback(`[Room|connectPeerTransport] Peer object not found for socket ID: ${socket_id}`);
+            }
+
+            const connectTransport = await peer.connectTransport(transport_id, dtlsParameters);
+
+            if (!connectTransport) {
+                return this.callback(`[Room|connectPeerTransport] error: Transport with ID ${transport_id} not found`);
+            }
+
+            return '[Room|connectPeerTransport] done';
+        } catch (error) {
+            log.error('Error connecting peer transport', error.message);
+            return this.callback(`[Room|connectPeerTransport] error: ${error.message}`);
+        }
+    }
