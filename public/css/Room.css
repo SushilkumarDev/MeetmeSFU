@@ -216,3 +216,41 @@ body {
 #refreshAudioDevices:hover {
     background: var(--body-bg);
 }
+
+/*--------------------------------------------------------------
+# Settings Table
+--------------------------------------------------------------*/
+
+.settingsTable {
+    width: 100%;
+    color: #fff;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-style: hidden;
+}
+.settingsTable td,
+th {
+    text-align: left;
+    padding: 5px;
+    /* border: 1px solid grey; */
+}
+.settingsTable tr:nth-child(even) {
+    /* background-color: #121212; */
+}
+.settingsTable i {
+    border: none;
+    border-radius: 5px;
+}
+.custom-width {
+    width: 140px;
+}
+.width-150 {
+    width: 150px;
+}
+.width-180 {
+    width: 180px;
+}
+
+.microphone-table-width {
+    width: 180px;
+}
