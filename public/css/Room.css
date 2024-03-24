@@ -71,3 +71,8 @@ body {
 /*--------------------------------------------------------------
 # Room QR
 --------------------------------------------------------------*/
+#qrRoomContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
