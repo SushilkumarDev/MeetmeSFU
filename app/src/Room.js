@@ -365,3 +365,132 @@ module.exports = class Room {
             return this.callback(`[Room|connectPeerTransport] error: ${error.message}`);
         }
     }
+   // ####################################################
+    // PRODUCE
+    // ####################################################
+
+    async produce(socket_id, producerTransportId, rtpParameters, kind, type) {
+        //
+        if (!socket_id || !producerTransportId || !rtpParameters || !kind || !type) {
+            return this.callback('[Room|produce] Invalid input parameters');
+        }
+
+        const peer = this.getPeer(socket_id);
+
+        if (!peer || typeof peer !== 'object') {
+            return this.callback(`[Room|produce] Peer object not found for socket ID: ${socket_id}`);
+        }
+
+        const peerProducer = await peer.createProducer(producerTransportId, rtpParameters, kind, type);
+
+        if (!peerProducer || !peerProducer.id) {
+            return this.callback(`[Room|produce] Peer producer error: '${peerProducer}'`);
+        }
+
+        const { id } = peerProducer;
+
+        const { peer_name, peer_info } = peer;
+
+        this.broadCast(socket_id, 'newProducers', [
+            {
+                producer_id: id,
+                producer_socket_id: socket_id,
+                peer_name: peer_name,
+                peer_info: peer_info,
+                type: type,
+            },
+        ]);
+
+        return id;
+    }
+
+    // ####################################################
+    // CONSUME
+    // ####################################################
+
+    async consume(socket_id, consumer_transport_id, producer_id, rtpCapabilities) {
+        try {
+            if (!socket_id || !consumer_transport_id || !producer_id || !rtpCapabilities) {
+                return this.callback('[Room|consume] Invalid input parameters');
+            }
+
+            if (!this.router.canConsume({ producerId: producer_id, rtpCapabilities })) {
+                log.warn('Cannot consume', {
+                    socket_id,
+                    consumer_transport_id,
+                    producer_id,
+                });
+                return this.callback(`[Room|consume] Room router cannot consume producer_id: '${producer_id}'`);
+            }
+
+            const peer = this.getPeer(socket_id);
+
+            if (!peer || typeof peer !== 'object') {
+                return this.callback(`[Room|consume] Peer object not found for socket ID: ${socket_id}`);
+            }
+
+            const peerConsumer = await peer.createConsumer(consumer_transport_id, producer_id, rtpCapabilities);
+
+            if (!peerConsumer || !peerConsumer.consumer || !peerConsumer.params) {
+                log.debug('peerConsumer or params are not defined');
+                return this.callback(`[Room|consume] peerConsumer error: '${peerConsumer}'`);
+            }
+
+            const { consumer, params } = peerConsumer;
+
+            const { id, kind } = consumer;
+
+            const { peer_name } = peer;
+
+            consumer.on('producerclose', () => {
+                log.debug('Consumer closed due to producerclose event', {
+                    peer_name: peer_name,
+                    consumer_id: id,
+                });
+                peer.removeConsumer(id);
+
+                // Notify the client that consumer is closed
+                this.send(socket_id, 'consumerClosed', {
+                    consumer_id: id,
+                    consumer_kind: kind,
+                });
+            });
+
+            return params;
+        } catch (error) {
+            log.error('Error occurred during consumption', error.message);
+            return this.callback(`[Room|consume] ${error.message}`);
+        }
+    }
+
+    closeProducer(socket_id, producer_id) {
+        if (!socket_id || !producer_id) return;
+
+        const peer = this.getPeer(socket_id);
+
+        if (!peer || typeof peer !== 'object') {
+            return;
+        }
+
+        peer.closeProducer(producer_id);
+
+        log.debug('Producer closed', producer_id);
+    }
+
+    // ####################################################
+    // HANDLE BANNED PEERS
+    // ####################################################
+
+    addBannedPeer(uuid) {
+        if (!this.bannedPeers.includes(uuid)) {
+            this.bannedPeers.push(uuid);
+            log.debug('Added to the banned list', {
+                uuid: uuid,
+                banned: this.bannedPeers,
+            });
+        }
+    }
+
+    isBanned(uuid) {
+        return this.bannedPeers.includes(uuid);
+    }
