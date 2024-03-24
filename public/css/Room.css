@@ -254,3 +254,29 @@ th {
 .microphone-table-width {
     width: 180px;
 }
+/*--------------------------------------------------------------
+# Dropdown menu
+--------------------------------------------------------------*/
+
+.dropdown-menu {
+    background: var(--body-bg);
+}
+
+.dropdown-menu button:hover {
+    background-color: var(--body-bg);
+    color: white;
+    transform: scale(1);
+}
+
+.dropdown-menu li:hover {
+    background: var(--btns-bg-color);
+}
+
+/* Hide the default Bootstrap dropdown icon */
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+/*--------------------------------------------------------------
+# Style the tab
+--------------------------------------------------------------*/
