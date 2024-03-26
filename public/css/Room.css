@@ -666,3 +666,120 @@ th {
     text-align: center;
     border-radius: 10px;
 }
+
+/*--------------------------------------------------------------
+# Room/user emoji picker
+--------------------------------------------------------------*/
+
+.roomEmoji {
+    z-index: 9;
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.userEmoji {
+    z-index: 9;
+    position: absolute;
+    left: 80px;
+    bottom: 60px;
+}
+
+.emojiPickerHeader {
+    display: flex;
+    justify-content: flex-start;
+    background: #151616;
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff;
+    cursor: move;
+}
+
+#closeEmojiPickerContainer {
+    font-size: 1.3rem;
+}
+
+/*--------------------------------------------------------------
+# swal2
+--------------------------------------------------------------*/
+
+.swal2-validation-message,
+.swal2-title,
+.swal2-content,
+.swal2-input {
+    text-align: center;
+    color: #fff !important;
+    background-color: transparent !important;
+}
+.swal2-html-container {
+    text-align: center;
+    color: whitesmoke !important;
+    background-color: transparent !important;
+}
+
+.swal2-input {
+    border: var(--border) !important;
+    box-shadow: none !important;
+}
+
+.swal2-popup {
+    /* border: var(--border) !important; */
+    border: 0.5px solid rgb(255 255 255 / 32%) !important;
+}
+
+.swal2-popup .swal2-styled:focus {
+    box-shadow: none !important;
+}
+
+.swal2-timer-progress-bar-container {
+    background: #376df9;
+}
+
+.img-about {
+    margin: 0 !important;
+}
+
+/*--------------------------------------------------------------
+# About
+--------------------------------------------------------------*/
+
+#about {
+    cursor: default;
+}
+
+#about b {
+    color: rgb(0, 180, 50);
+}
+
+#about img {
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+#about a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#about a:hover {
+    color: grey;
+    transition: all 0.3s ease-in-out;
+}
+
+#about button {
+    border: none;
+    width: 170px;
+    height: 40px;
+    font-size: 1.2rem;
+    background: linear-gradient(100deg, #376df9 0, #4b4547 75%, #222222 100%);
+    box-shadow: 0 0 6px 0 rgb(251 255 0 / 82%);
+    color: #ffffff;
+    transition: background 0.23s;
+    cursor: pointer;
+}
+
+#about button:hover {
+    font-weight: bold;
+}
