@@ -280,3 +280,166 @@ th {
 /*--------------------------------------------------------------
 # Style the tab
 --------------------------------------------------------------*/
+
+.settingsTable {
+    width: 100%;
+    color: #fff;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-style: hidden;
+}
+.settingsTable td,
+th {
+    text-align: left;
+    padding: 5px;
+    /* border: 1px solid grey; */
+}
+.settingsTable tr:nth-child(even) {
+    /* background-color: #121212; */
+}
+.settingsTable i {
+    border: none;
+    border-radius: 5px;
+}
+.custom-width {
+    width: 140px;
+}
+.width-150 {
+    width: 150px;
+}
+.width-180 {
+    width: 180px;
+}
+
+.microphone-table-width {
+    width: 180px;
+}
+
+/*--------------------------------------------------------------
+# Dropdown menu
+--------------------------------------------------------------*/
+
+.dropdown-menu {
+    background: var(--body-bg);
+}
+
+.dropdown-menu button:hover {
+    background-color: var(--body-bg);
+    color: white;
+    transform: scale(1);
+}
+
+.dropdown-menu li:hover {
+    background: var(--btns-bg-color);
+}
+
+/* Hide the default Bootstrap dropdown icon */
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+/*--------------------------------------------------------------
+# Style the tab
+--------------------------------------------------------------*/
+
+.tab {
+    padding: 10px;
+    overflow: hidden;
+    border-radius: 5px;
+    width: 35%;
+    background-color: var(--body-bg);
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    border-right: var(--border);
+}
+
+.tabActions {
+    position: relative;
+    width: 65%;
+    background-color: var(--body-bg);
+    min-height: 480px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 830px) {
+    .tab {
+        width: 100%;
+        min-height: auto;
+        flex-direction: row;
+        border-right: none !important;
+    }
+    .tabActions {
+        width: 100%;
+        border-radius: 10px;
+    }
+    .tabButtonText {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .tab {
+        display: inline;
+    }
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    margin: 3px;
+    padding: 11px;
+    float: left;
+    text-align: left;
+    color: #fff;
+    border: var(--border);
+    background-color: rgba(0, 0, 0, 0.2);
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: transparent;
+    transform: scale(0.95);
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: var(--tab-btn-active);
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+}
+
+.tabcontent button i {
+    padding: 10px;
+    border: var(--border);
+    border-radius: 5px;
+}
+
+.tabcontent button {
+    margin-top: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+.tabcontent button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    transform: scale(1);
+}
+
+/* on open display devices tab */
+#tabRoom {
+    display: block;
+}
+
+.mod-title {
+    margin-top: 5px;
+    color: grey;
+}
