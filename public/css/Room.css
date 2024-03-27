@@ -847,3 +847,106 @@ button:hover {
 .green {
     color: rgb(0, 255, 71) !important;
 }
+
+/*--------------------------------------------------------------
+# Lobby users list
+--------------------------------------------------------------*/
+
+#lobby {
+    z-index: 7;
+    position: absolute;
+    margin: auto;
+    padding: 10px;
+    min-width: 320px;
+    background: var(--body-bg);
+    border: var(--border);
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.lobby-header {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff;
+    cursor: move;
+}
+
+#lobbyUsers {
+    max-height: 680px;
+    overflow: auto;
+}
+
+#lobbyUsers table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#lobbyUsers td,
+#lobbyUsers th {
+    color: #fff;
+    text-align: left;
+    padding: 8px;
+}
+
+#lobbyUsers tr {
+    border-bottom: 1px solid #444444;
+}
+
+#lobbyUsers::-webkit-scrollbar {
+    width: 5px;
+}
+
+#lobbyUsers::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#lobbyUsers::-webkit-scrollbar-thumb {
+    background: #404040;
+}
+
+/*--------------------------------------------------------------
+# Send File
+--------------------------------------------------------------*/
+
+#sendFileDiv,
+#receiveFileDiv {
+    z-index: 8;
+    display: none;
+    padding: 20px;
+    margin: auto;
+    min-width: 320px;
+    background: var(--body-bg);
+    border: var(--border);
+    border-radius: var(--border-radius);
+    color: #fff;
+    overflow: hidden;
+}
+
+#sendAbortBtn,
+#receiveHideBtn {
+    padding: 5px;
+    border-radius: 5px;
+    color: #fff;
+    background: transparent;
+}
+
+#sendAbortBtn:hover,
+#receiveHideBtn:hover {
+    color: rgb(255, 0, 0);
+    transform: var(--btns-hover-scale);
+    transition: all 0.3s ease-in-out;
+}
+
+progress {
+    width: 0;
+    min-width: 100%;
+}
+
+#imgShareSend:hover,
+#imgShareReceive:hover {
+    cursor: move;
+}
