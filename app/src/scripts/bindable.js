@@ -65,3 +65,94 @@ async function main() {
         await checkWebRtcServerPorts(webRtcServerIpAddress, webRtcServerStartPort, workers);
     }
 }
+
+/**
+ * Check if Server listen port is bindable
+ * @param {string} ipAddress
+ * @param {integer} port
+ */
+async function checkServerListenPorts(ipAddress, port) {
+    const bindable = await isBindable(ipAddress, port);
+    if (bindable) {
+        console.log(`${ipAddress}:${port} is bindable 🟢`);
+    } else {
+        console.log(`${ipAddress}:${port} is not bindable 🔴`);
+    }
+}
+
+/**
+ * Check if WebRtcServer ports are bindable
+ * @param {string} ipAddress
+ * @param {integer} startPort
+ * @param {integer} workers
+ */
+async function checkWebRtcServerPorts(ipAddress, startPort, workers) {
+    let port = startPort;
+    for (let i = 0; i < workers; i++) {
+        try {
+            const bindable = await isBindable(ipAddress, port);
+            if (bindable) {
+                console.log(`${ipAddress}:${port} is bindable 🟢`);
+            } else {
+                console.log(`${ipAddress}:${port} is not bindable 🔴`);
+            }
+            port++;
+        } catch (err) {
+            console.error('Error occurred:', err);
+        }
+    }
+}
+
+/**
+ * Check if WebRtcTransport Worker ports are bindable
+ * @param {string} ipAddress
+ * @param {integer} minPort
+ * @param {integer} maxPort
+ */
+async function checkWebRtcTransportPorts(ipAddress, minPort, maxPort) {
+    let port = minPort;
+    for (let i = 0; i <= maxPort - minPort; i++) {
+        try {
+            const bindable = await isBindable(ipAddress, port);
+            if (bindable) {
+                console.log(`${ipAddress}:${port} is bindable 🟢`);
+            } else {
+                console.log(`${ipAddress}:${port} is not bindable 🔴`);
+            }
+            port++;
+        } catch (err) {
+            console.error('Error occurred:', err);
+        }
+    }
+}
+
+/**
+ * Check if ipAddress:port are bindable
+ * @param {string} ipAddress
+ * @param {integer} port
+ * @returns {Promise<boolean>} A promise that resolves to true if the address is bindable, false otherwise.
+ */
+async function isBindable(ipAddress, port) {
+    return new Promise((resolve, reject) => {
+        const server = net.createServer();
+
+        server.once('error', (err) => {
+            if (err.code === 'EADDRINUSE') {
+                resolve(false); // Address is already in use
+            } else {
+                reject(err); // Other error occurred
+            }
+        });
+
+        server.once('listening', () => {
+            server.close();
+            resolve(true); // Address is bindable
+        });
+
+        server.listen(port, ipAddress);
+    });
+}
+
+main().catch((err) => {
+    console.error('Error occurred in main function:', err.message);
+});
