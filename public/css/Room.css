@@ -950,3 +950,65 @@ progress {
 #imgShareReceive:hover {
     cursor: move;
 }
+
+
+/*--------------------------------------------------------------
+# Whiteboard
+--------------------------------------------------------------*/
+
+#whiteboard {
+    z-index: 4;
+    position: absolute;
+    margin: auto;
+    padding: 10px;
+    width: var(--wb-width);
+    height: var(--wb-height);
+    background: var(--wb-bg);
+    border: var(--border);
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.whiteboard-header {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff;
+    cursor: move;
+}
+
+.whiteboard-header-title {
+    display: inline-flex;
+    align-items: center;
+    float: right;
+}
+
+.whiteboard-header button {
+    /* padding: 10px; */
+    border-radius: 5px;
+    /* border: var(--border); */
+    border: none !important;
+}
+
+.whiteboard-header-options {
+    position: absolute;
+    right: 20px;
+}
+
+.whiteboard-header-options .dropdown {
+    margin-left: 10px;
+    float: right;
+}
+
+.whiteboard-header-options .dropdown-menu {
+    display: none;
+    width: 100vw;
+    padding: 10px;
+    background: var(--body-bg);
+}
+
+.whiteboard-header-options .dropdown-menu button {
+    display: inline-flex;
+}
