@@ -1012,3 +1012,50 @@ progress {
 .whiteboard-header-options .dropdown-menu button {
     display: inline-flex;
 }
+
+.whiteboardColorPicker {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0;
+    width: 20px;
+    height: 15px;
+    margin: 2px;
+    border-radius: 20px;
+    border: solid 0.5px #afadad38;
+}
+.whiteboardColorPicker:hover {
+    transform: var(--btns-hover-scale);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+.whiteboardColorPicker::-webkit-color-swatch {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+}
+.whiteboardColorPicker::-webkit-color-swatch-wrapper {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+}
+.whiteboardColorPicker::-moz-color-swatch {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+}
+.whiteboardColorPicker::-moz-color-swatch-wrapper {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+}
+.whiteboardColorPicker::color-swatch {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+}
+.whiteboardColorPicker::color-swatch-wrapper {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+}
