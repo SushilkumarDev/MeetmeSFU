@@ -46,3 +46,22 @@ const checkXSS = (dataObject) => {
         return dataObject;
     }
 };
+
+
+function objectToJSONString(dataObject) {
+    try {
+        return JSON.stringify(dataObject);
+    } catch (error) {
+        return false;
+    }
+}
+
+function JSONStringToObject(jsonString) {
+    try {
+        return JSON.parse(jsonString);
+    } catch (error) {
+        return false;
+    }
+}
+
+module.exports = checkXSS;
